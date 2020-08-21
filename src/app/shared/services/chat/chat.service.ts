@@ -4,6 +4,8 @@ import { Constants } from '@core/constants';
 import { ChatModel, ListEntityQuery, ListEntityResponse, PlainQuery, WriteResult } from '@shared/models';
 import { Subject } from 'rxjs';
 import { map, scan, tap } from 'rxjs/operators';
+import { AppUtils } from '@core/helpers/utils';
+import { CACHE_DATABASE } from '@core/helpers/cache';
 
 @Injectable({
     providedIn: 'root'
@@ -56,7 +58,14 @@ export class ChatService {
     }
 
     public getGroupMembers(group_id: string) {
-        return this.http.get<ListEntityResponse<ChatModel.IMember>>(`${ Constants.API.CHAT.members }/${ group_id }`)
+        return this.http
+            .configure({
+                CACHE: {
+                    category: 'test',
+                    ttl: AppUtils.duration(10)
+                }
+            })
+            .get<ListEntityResponse<ChatModel.IMember>>(`${ Constants.API.CHAT.members }/${ group_id }`)
             .pipe(map(({ list }) => list));
     }
 

@@ -12,6 +12,7 @@ import {
   SetupInterceptor,
   TeardownInterceptor, UniversalInterceptor, UrlInterceptor
 } from './interceptors';
+import { AppUtils } from './helpers/utils';
 
 @NgModule({
   imports: [
@@ -22,8 +23,11 @@ import {
       PROGRESS_BAR: true,
       FORM_PROGRESS_BAR: true,
       FULL_RESPONSE: false,
-      LOCAL_CACHE: false,
-      CACHE_CATEGORY: 'local_cache'
+      CACHE: {
+        category: 'local_cache',
+        // provider: CACHE_DATABASE,
+        ttl: AppUtils.duration(60)
+      }
     }),
   ],
   providers: [

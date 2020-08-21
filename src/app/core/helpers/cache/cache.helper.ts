@@ -3,13 +3,15 @@ import { HttpResponse } from '@angular/common/http';
 import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { AsyncCollection, AsyncDatabase } from '@ezzabuzaid/document-storage';
 import { from } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AppUtils } from '../utils';
 export const CACHE_DATABASE = new InjectionToken<AsyncDatabase>('CacheDatabase');
 
 export class HttpCacheEntry {
     constructor(
         public url: string,
-        public value: HttpResponse<any>
+        public value: HttpResponse<any>,
+        public ttl: number
     ) { }
 }
 
@@ -17,38 +19,27 @@ export class HttpCacheEntry {
     providedIn: 'root'
 })
 export class HttpCacheHelper {
+    // TODO: implement caching strategies
     private collection: AsyncCollection<HttpCacheEntry> = null;
 
     constructor(
-        @Inject(CACHE_DATABASE) private storage: AsyncDatabase
+        @Inject(CACHE_DATABASE) private storage: AsyncDatabase,
     ) { }
-
-    // TODO: setup cache invalidate strategy
-    removeOutdatedEntries() {
-        this.collection.getAll()
-            .then(entries => {
-                const maxAge = AppUtils.daysToSeconds(1);
-                entries.forEach(({ id }) => {
-                    if (AppUtils.isDateElapsed(Date.now(), maxAge)) {
-                        this.collection.delete(id);
-                    }
-                });
-            });
-    }
 
     public populate(name: string) {
         this.collection = this.storage.collection<HttpCacheEntry>(name);
     }
 
-    public set(uri: string, value: HttpResponse<any>) {
-        return this.collection.set(new HttpCacheEntry(uri, value));
+    public set(uri: string, value: HttpResponse<any>, ttl: number) {
+        return this.collection.set(new HttpCacheEntry(uri, value, ttl));
     }
 
     public get(url: string) {
-        const result = this.collection
-            .get((entry) => entry.url === url)
-            .then(response => response && new HttpResponse(response.value));
-        return from(result);
+        return from(this.collection.get((entry) => entry.url === url))
+            .pipe(
+                map((response) => AppUtils.dateElapsed(response?.ttl ?? 0) ? null : response),
+                map(response => response && new HttpResponse(response.value)),
+            );
     }
 
     public clear() {

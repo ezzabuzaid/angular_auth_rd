@@ -208,13 +208,21 @@ export class AppUtils {
 
     /**
      * Convert numeric days to seconds
-     *
-     * @param days number of days to convert
      */
     static daysToSeconds(days: number) {
         const d = new Date();
         const a = new Date();
         a.setDate(a.getDate() + days);
+        return a.getTime() - d.getTime();
+    }
+
+    /**
+    * Convert minutes to seconds
+    */
+    static minutesToSeconds(minutes: number) {
+        const d = new Date();
+        const a = new Date();
+        a.setMinutes(a.getMinutes() + minutes);
         return a.getTime() - d.getTime();
     }
 
@@ -226,8 +234,8 @@ export class AppUtils {
      * @param date the date to check
      * @param maxAge default to current date
      */
-    static isDateElapsed(date: number, maxAge = Date.now()) {
-        return date < Date.now() - maxAge;
+    static dateElapsed(date: number) {
+        return date < Date.now();
     }
 
     /**
