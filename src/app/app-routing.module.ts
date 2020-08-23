@@ -7,7 +7,7 @@ const routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: Constants.Routing.HOME.withSlash,
+    redirectTo: Constants.Routing.DEFAULT.withSlash,
   },
   {
     path: Constants.Routing.Portal.withoutSlash,

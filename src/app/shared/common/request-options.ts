@@ -26,20 +26,4 @@ export interface IRequestOptions {
      * the default is to return only the data property from the response
      */
     FULL_RESPONSE: boolean;
-
-    /**
-    * Configure the request to be cached
-    * 
-    * if undefined/null or not setted the request will not be cached
-    */
-    CACHE: {
-        /**
-        * Name of the object store that will be used to save the response
-        *
-        * requires LOCAL_CACHE to be true
-        */
-        category?: string;
-        // provider: InjectionToken<AsyncStorage>;
-        ttl?: number;
-    }
 }

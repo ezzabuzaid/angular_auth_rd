@@ -1,4 +1,4 @@
-<h5 *ngIf="data.title" mat-dialog-title>{{ (data.title | translate) }}</h5>
+<h5 *ngIf="data.title" mat-dialog-title>{{ (data.title ) }}</h5>
 <mat-divider></mat-divider>
 <div mat-dialog-content>
   <p *ngIf="data.description">{{ data.description }}</p>
@@ -9,6 +9,6 @@
 <mat-divider></mat-divider>
 <div mat-dialog-actions class="justify-content-end">
   <button color="accent" type="button" class="w-25" mat-stroked-button (click)="close()">
-    {{ (data.confirm || 'button_confirm') | translate }}
+    {{ (data.confirm || 'button_confirm')  }}
   </button>
 </div>

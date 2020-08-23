@@ -7,7 +7,7 @@ import { SubjectFactory } from '@core/helpers/subject-factory';
 import { TokenHelper } from '@core/helpers/token';
 import { environment } from '@environments/environment';
 import { NAVIGATOR } from '@shared/common';
-import { PortalModel, ResponseModel } from '@shared/models';
+import { BaseModel, PortalModel, ResponseModel } from '@shared/models';
 import { from } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 declare const biri: () => Promise<string>;
@@ -106,4 +106,14 @@ export class ApplicationUser extends SubjectFactory<boolean> {
   get isBrowser() {
     return isPlatformBrowser(this.platformId);
   }
+}
+
+
+export interface IApplicationUser extends BaseModel {
+  fullName: string;
+  verified: boolean;
+  username: string;
+  email: string;
+  mobile: string;
+  role: string;
 }

@@ -1,16 +1,16 @@
 <div class="container h-100">
   <div class="row row-cols-1 row-cols-md-2 justify-content-center align-items-md-center h-100">
     <ngx-form-factory title="Login in to continue" [formGroup]="form" (onSubmit)="login($event)">
-      <span form-header class="text-uppercase">{{ 'application_name' | translate }}</span>
+      <span form-header class="text-uppercase">Angular Authentication</span>
       <ng-container ngProjectAs="[form-body]">
         <ngx-field-factory [field]="rememberMeCheckBox"></ngx-field-factory>
       </ng-container>
       <section form-footer class="d-flex align-items-center flex-column">
         <a mat-button id="registerButton" [routerLink]="['../', 'register']">
-          <small class="text--accent">{{ 'button_signup' | translate }}</small>
+          <small class="text--accent">Create account</small>
         </a>
         <a mat-button class="align-self-start" [routerLink]="['../', 'forgot']">
-          <small class="text-muted">{{ 'forgot_password' | translate }}</small>
+          <small class="text-muted">Forgot password</small>
         </a>
       </section>
     </ngx-form-factory>

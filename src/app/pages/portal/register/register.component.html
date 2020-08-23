@@ -1,6 +1,7 @@
 <div class="container h-100">
-  <div class="row h-100 center-flex">
-    <ngx-form-factory title="Register in our system" (onSubmit)="register($event)" [formGroup]="form">
+  <div class="row row-cols-1 row-cols-md-2 justify-content-center align-items-md-center h-100">
+    <ngx-form-factory title="Create an account" (onSubmit)="register($event)" [formGroup]="form">
+      <span form-header class="text-uppercase">Angular Authentication</span>
       <ng-container ngProjectAs="[form-body]">
         <!-- TODO: Create custom password control -->
         <ng-container *ngIf="$passwordVisible | async">
@@ -9,28 +10,28 @@
             <mat-icon class="center-flex font-size-13 font-weight-bold">
               {{form.hasControlError('password', 'uppercase') ? 'clear': 'check'}}
             </mat-icon>
-            <span>at least one uppercase charachter</span>
+            <span>at least one uppercase character</span>
           </div>
           <div [ngClass]="[form.hasControlError('password', 'lowercase') ? 'text-danger':'text-success']"
             class="d-flex align-items-center">
             <mat-icon class="center-flex font-size-13 font-weight-bold">
               {{form.hasControlError('password', 'lowercase') ? 'clear': 'check'}}
             </mat-icon>
-            <span>at least one lowercase charachter</span>
+            <span>at least one lowercase character</span>
           </div>
           <div [ngClass]="[form.hasControlError('password', 'special_character') ? 'text-danger':'text-success']"
             class="d-flex align-items-center">
             <mat-icon class="center-flex font-size-13 font-weight-bold">
               {{form.hasControlError('password', 'special_character') ? 'clear': 'check'}}
             </mat-icon>
-            <span>at least one special charachter</span>
+            <span>at least one special character</span>
           </div>
           <div [ngClass]="[form.hasControlError('password', 'between') ? 'text-danger':'text-success']"
             class="d-flex align-items-center">
             <mat-icon class="center-flex font-size-13 font-weight-bold">
               {{form.hasControlError('password', 'between') ? 'clear': 'check'}}
             </mat-icon>
-            <span>between 8 and 16 charachter</span>
+            <span>between 8 and 16 characters</span>
           </div>
           <div [ngClass]="[form.hasControlError('password', 'number') ? 'text-danger':'text-success']"
             class="d-flex align-items-center">

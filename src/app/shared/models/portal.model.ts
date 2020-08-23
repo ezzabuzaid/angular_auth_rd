@@ -1,17 +1,18 @@
 export namespace PortalModel {
-    export enum ERoles {
-        SUPERADMIN = 1,
-        ADMIN,
-        CLIENT,
-        CUSTOMER,
+    export class Roles {
+        static SUPERADMIN = 'SUPERADMIN';
+        static ADMIN = 'ADMIN';
+        static CLIENT = 'CLIENT';
+        static CUSTOMER = 'CUSTOMER';
     }
+
     export interface IRegister {
-        role: ERoles;
+        role: Roles;
         password: string;
         mobile: string;
         username: string;
         email: string;
-        profile: IProfile;
+        fullName: string;
     }
     export class IProfile {
         firstName: string;
@@ -25,10 +26,8 @@ export namespace PortalModel {
         occupation: string;
     }
     export interface IForgotPassword {
-        firstName: string;
-        lastName: string;
-        placeOfBirth: string;
-        username: Date;
+        username: string;
+        fullName: string;
     }
     export interface ILoginRequest {
         username: string;

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ApplicationUser } from '@core/application-user';
 import { Constants } from '@core/constants';
 import { EFieldType, Field, Form } from '@ezzabuzaid/ngx-form-factory';
-import { Fields, RouteUtility } from '@shared/common';
+import { RouteUtility } from '@shared/common';
 import { PortalModel } from '@shared/models';
 
 @Component({
@@ -28,7 +28,12 @@ export class LoginComponent implements OnInit {
       autocomplete: 'username',
       validatorOrOpts: Validators.required
     }),
-    password: Fields.Password()
+    password: new Field({
+      type: EFieldType.PASSWORD,
+      autocomplete: 'current-password',
+      label: 'Passowrd',
+      validatorOrOpts: Validators.required,
+    })
   });
 
   constructor(

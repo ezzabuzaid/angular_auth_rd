@@ -5,8 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ApplicationUser } from '@core/application-user';
 import { Constants } from '@core/constants';
-import { DateField, EFieldType, Field, Form, SelectField, SelectOption, SubmitEvent } from '@ezzabuzaid/ngx-form-factory';
-import { Fields } from '@shared/common';
+import { EFieldType, Field, Form, SelectField, SelectOption, SubmitEvent } from '@ezzabuzaid/ngx-form-factory';
 import { PortalModel } from '@shared/models';
 import { Between, ContainsLowercase, ContainsNumber, ContainsSpecialCharacter, ContainsUppercase } from '@shared/validators';
 import { merge, Observable, of } from 'rxjs';
@@ -23,14 +22,21 @@ import { mapTo } from 'rxjs/operators';
 export class RegisterComponent implements OnInit, AfterViewInit {
   form = new Form<PortalModel.IRegister>({
     username: new Field({
-      label: 'placeholder_username',
+      label: 'Username',
       autocomplete: 'username',
       validatorOrOpts: Validators.required
     }),
-    email: Fields.Email(),
-    password: Fields.Password({
+    email: new Field({
+      type: EFieldType.EMAIL,
+      autocomplete: 'email',
+      label: 'Email',
+      validatorOrOpts: [Validators.required, Validators.email],
+    }),
+    password: new Field({
+      type: EFieldType.PASSWORD,
+      label: 'Passowrd',
       autocomplete: 'new-password',
-      hint: 'at least 8 charachter',
+      hint: 'at least 8 character',
       validatorOrOpts: [
         Validators.required,
         Between(8, 16),
@@ -43,55 +49,21 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     mobile: new Field({
       type: EFieldType.TEL,
       autocomplete: 'mobile',
-      label: 'placeholder_mobile',
+      label: 'Mobile',
       value: '792807794',
       validatorOrOpts: Validators.required
     }),
-    profile: new Form<PortalModel.IProfile>({
-      firstName: new Field({
-        label: 'placeholder_firstname',
-        section: 'name',
-        validatorOrOpts: Validators.required
-      }),
-      lastName: new Field({
-        label: 'placeholder_lastname',
-        section: 'name',
-        validatorOrOpts: Validators.required
-      }),
-      // new RawField('nationality', {
-      //   component: CountryControlComponent,
-      //   section: 3,
-      //   validatorOrOpts: Validators.required
-      // }),
-      nationality: new Field({
-        label: 'Nationality',
-        type: EFieldType.COUNTRY,
-        section: 'General',
-        validatorOrOpts: Validators.required
-      }),
-      placeOfBirth: new Field({
-        label: 'Place of birth',
-        type: EFieldType.COUNTRY,
-        section: 'General',
-        validatorOrOpts: Validators.required
-      }),
-      dateOfBrith: new DateField({
-        label: 'Date of birth',
-        section: 'General',
-        max: new Date(),
-        validatorOrOpts: Validators.required
-      }),
-      gender: new SelectField({
-        label: 'Gender',
-        section: 'General',
-        options: of([new SelectOption('Male', 0), new SelectOption('Female', 1)]),
-        validatorOrOpts: Validators.required
-      }),
-      occupation: new Field({
-        label: 'Occupation',
-        section: 'General'
-      }),
-    })
+    fullName: new Field({
+      label: 'Fullname',
+      section: 'General',
+      validatorOrOpts: Validators.required,
+    }),
+    role: new SelectField({
+      label: 'Gender',
+      section: 'General',
+      options: of(Object.entries(PortalModel.Roles).map(([key, value]) => new SelectOption(value, key))),
+      validatorOrOpts: Validators.required
+    }),
   });
 
 
@@ -100,12 +72,9 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     private readonly router: Router,
     private readonly applicationUser: ApplicationUser,
     private snackbar: MatSnackBar,
-    private formBuilder: FormBuilder
   ) { }
 
-  ngOnInit() {
-    // this.formBuilder.group()
-  }
+  ngOnInit() { }
 
   ngAfterViewInit() {
     this.$passwordVisible = merge(

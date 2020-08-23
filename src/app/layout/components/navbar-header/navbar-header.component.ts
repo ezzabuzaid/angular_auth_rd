@@ -8,7 +8,7 @@ import { RegisterdSidebar, SidebarManager } from '@widget/sidebar';
   styleUrls: ['./navbar-header.component.scss']
 })
 export class NavbarHeaderComponent implements OnInit {
-  $user = this.usersService.getCurrentUser();
+  $user = this.usersService.currentUser();
   constructor(
     private readonly sidebarService: SidebarManager,
     private readonly usersService: UsersService

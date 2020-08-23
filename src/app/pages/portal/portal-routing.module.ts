@@ -9,11 +9,6 @@ const routes: Routes = [
   {
     path: '',
     children: [
-      // {
-      //   path: '',
-      //   pathMatch: 'full',
-      //   redirectTo: '/portal/login',
-      // },
       { path: Constants.Routing.FORGOT_PASSWORD.withoutSlash, component: ForgetPasswordComponent },
       { path: Constants.Routing.LOGIN.withoutSlash, component: LoginComponent },
       { path: Constants.Routing.REGISTER.withoutSlash, component: RegisterComponent },

@@ -6,7 +6,6 @@ import { ApplicationUser } from '@core/application-user';
 import { Constants } from '@core/constants';
 import { AppUtils } from '@core/helpers/utils';
 import { EFieldType, Field, Form, SubmitEvent } from '@ezzabuzaid/ngx-form-factory';
-import { Fields, _extract } from '@shared/common';
 import { PortalModel } from '@shared/models';
 import { AllEqual, Between, ContainsLowercase, ContainsNumber, ContainsSpecialCharacter, ContainsUppercase, EqualTo } from '@shared/validators';
 import { Subject } from 'rxjs';
@@ -23,30 +22,24 @@ import { finalize, takeUntil } from 'rxjs/operators';
 export class ForgetPasswordComponent implements OnInit, OnDestroy {
   verificationForm = new Form<PortalModel.IForgotPassword>({
     username: new Field({
-      label: _extract('placeholder_username'),
+      label: 'Username',
       autocomplete: 'username',
       validatorOrOpts: Validators.required
     }),
-    firstName: new Field({
-      label: _extract('placeholder_firstname'),
+    fullName: new Field({
+      label: 'Full name',
       autocomplete: 'given-name',
-      validatorOrOpts: Validators.required
-    }),
-    lastName: new Field({
-      label: _extract('placeholder_lastname'),
-      autocomplete: 'family-name',
-      validatorOrOpts: Validators.required
-    }),
-    placeOfBirth: new Field({
-      label: _extract('placeholder_place_of_birth'),
-      autocomplete: 'country-name',
-      type: EFieldType.COUNTRY,
       validatorOrOpts: Validators.required
     }),
   });
 
   sendPincodeForm = new Form<{ email: string, mobile: string }>({
-    email: Fields.Email(),
+    email: new Field({
+      type: EFieldType.EMAIL,
+      autocomplete: 'email',
+      label: 'Email',
+      validatorOrOpts: [Validators.required, Validators.email],
+    }),
     mobile: new Field({
       type: EFieldType.TEL,
       autocomplete: 'mobile',
@@ -54,9 +47,11 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
   });
 
   resetPasswordForm = new Form<{ password: string, confirmPassword: string }>({
-    password: Fields.Password({
+    password: new Field({
+      type: EFieldType.PASSWORD,
+      label: 'Passowrd',
       autocomplete: 'off',
-      hint: 'at least 8 charachter',
+      hint: 'at least 8 character',
       validatorOrOpts: [
         Validators.required,
         Between(8, 16),
@@ -66,8 +61,9 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
         ContainsNumber()
       ]
     }),
-    confirmPassword: Fields.Password({
-      label: 'placeholder_confirm_password',
+    confirmPassword: new Field({
+      type: EFieldType.PASSWORD,
+      label: 'Confirm password',
       autocomplete: 'off',
       validatorOrOpts: [
         Validators.required,
@@ -91,8 +87,6 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.goToStep(1);
-    this.verificationForm.patchValue({ username: 'profile', firstName: 'ezz', lastName: 'abuzaid', placeOfBirth: 'jo' });
-    this.sendPincodeForm.patchValue({ email: 'admin@admin.com' });
     this.resetPasswordForm.valueChanges
       .pipe(takeUntil(this.subscription))
       .subscribe(() => {
@@ -111,7 +105,6 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
   }
 
   sendPincode(event: SubmitEvent) {
-    console.log(this.accountVerificationResponse);
     this.applicationUser
       .sendPincode({
         type: this.sendPincodeType,
@@ -149,7 +142,9 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
         this.router.navigate([Constants.Routing.LOGIN.withSlash]);
       }))
       .subscribe(() => {
-        this.snackbar.open('Password reset successfully', 'Close', { duration: Number.MAX_VALUE });
+        this.snackbar.open('Password reset successfully', 'Close', {
+          duration: Number.MAX_VALUE
+        });
       });
   }
 

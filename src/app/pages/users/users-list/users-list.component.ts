@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { IApplicationUser } from '@core/application-user';
 import { DataGrid, DisplayColumn } from '@partials/datagrid/column';
-import { UsersModel } from '@shared/models';
 import { UsersService } from '@shared/services/users';
 
 @Component({
@@ -9,7 +9,7 @@ import { UsersService } from '@shared/services/users';
   styleUrls: ['./users-list.component.scss']
 })
 export class UsersListComponent implements OnInit {
-  dataGrid = new DataGrid<UsersModel.IUser>({
+  dataGrid = new DataGrid<IApplicationUser>({
     provider: (query) => this.usersService.getUsers(query),
     columns: [
       new DisplayColumn({ key: 'username', }),

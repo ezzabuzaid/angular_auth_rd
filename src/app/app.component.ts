@@ -2,13 +2,11 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 import { ApplicationUser } from '@core/application-user';
-import { ELanguage, LanguageService } from '@core/helpers/language';
 import { Logger } from '@core/helpers/logger';
 import { ServiceWorkerUtils } from '@core/helpers/service-worker/service-worker-update.service';
 import { TokenHelper } from '@core/helpers/token';
 import { AppUtils } from '@core/helpers/utils';
 import { environment } from '@environments/environment';
-import { TranslateService } from '@ngx-translate/core';
 import { Connectivity, NAVIGATOR } from '@shared/common';
 import { AnalyticsService } from '@shared/services/analytics';
 import { SeoService } from '@shared/services/seo/seo.service';
@@ -23,7 +21,6 @@ import { filter, switchMap, tap } from 'rxjs/operators';
 export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
-    private readonly languageService: LanguageService,
     private readonly renderer: Renderer2,
     private readonly seoService: SeoService,
     private readonly snackbar: MatSnackBar,
@@ -35,11 +32,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private readonly connectivity: Connectivity,
     private readonly applicationUser: ApplicationUser,
     private readonly tokenHelper: TokenHelper,
-    private translateService: TranslateService,
   ) {
     this.renderer.addClass(this.document.body, 'default-theme');
     this.seoService.populate({
-      title: this.translateService.instant('application_name'),
+      title: 'Angular Auth Research',
       description: 'Angular made easy',
       image: 'https://www.archer.ie/wp-content/uploads/2019/05/Angular_2.jpg',
       keywords: ['angular', 'ezzabuzaid', 'buildozer', 'boilerplate', 'angular starter', 'seed', 'angular seed'].join(',')
@@ -69,8 +65,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     if (this.isBrowser) {
-      this.languageService.populate(ELanguage.EN);
-
       this.applicationUser.listen()
         .pipe(filter(() => this.tokenHelper.isLogged))
         .subscribe(() => {

@@ -2,7 +2,6 @@ export namespace Constants {
   export class Application {
     static readonly TOKEN_KEY = 'token';
     static readonly APPLICATION_NAME = 'Angular Buildozer';
-    static readonly LANGUAGE_KEY = 'language';
     static readonly ONE_TIME = 'oneTime';
     static readonly REFRESH_TOKEN_KEY = 'refresh_token';
     static readonly DEVICE_UUID = 'x-device-uuid';
@@ -24,21 +23,13 @@ export namespace Constants {
       withoutSlash: 'register'
     };
 
-    static readonly Users = {
+    static readonly USERS = {
       withSlash: '/users',
       withoutSlash: 'users'
-    };
-    static readonly Todos = {
-      withSlash: '/todos',
-      withoutSlash: 'todos'
     };
     static readonly NOT_FOUND = {
       withSlash: '/404',
       withoutSlash: '404'
-    };
-    static HOME = {
-      withSlash: '/home',
-      withoutSlash: 'home',
     };
     static Portal = {
       withSlash: '/portal',
@@ -48,33 +39,10 @@ export namespace Constants {
       withSlash: '/sessions',
       withoutSlash: 'sessions',
     };
-    static MediaHub = {
-      withSlash: '/media',
-      withoutSlash: 'media',
-    };
-    static SharedMediaHub = {
-      withSlash: '/media?shared=true',
-      withoutSlash: 'media?shared=true',
-    };
-    static DEFAULT = Routing.HOME;
+    static DEFAULT = Routing.USERS;
   }
 
   export class API {
-    static readonly UPLOADS = {
-      base: 'uploads',
-      get tags() {
-        return this.folders + '/tags';
-      },
-      get folders() {
-        return this.base + '/folders';
-      },
-      get files() {
-        return this.folders + '/files';
-      },
-      get search() {
-        return this.base + '/search';
-      }
-    };
 
     static readonly PORTAL = {
       base: 'portal',
@@ -109,25 +77,6 @@ export namespace Constants {
         return this.base + '/search';
       }
     };
-    static readonly CHAT = {
-      base: '',
-      get rooms() {
-        return this.base + 'rooms';
-      },
-      get groups() {
-        return `${ this.base }${ this.rooms }/groups`;
-      },
-      get conversation() {
-        return `${ this.base }${ this.rooms }/conversations`;
-      },
-      get messages() {
-        return `${ this.base }${ this.rooms }/messages`;
-      },
-      get members() {
-        return `${ this.rooms }/members`;
-      },
-    };
-
     static readonly SESSIONS = {
       base: 'sessions',
       get deactivate() {

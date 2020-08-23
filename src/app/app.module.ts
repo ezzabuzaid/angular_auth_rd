@@ -6,13 +6,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { Constants } from '@core/constants';
 import { CoreModule } from '@core/core.module';
-import { LanguageLoader } from '@core/helpers/language';
 import { AppUtils } from '@core/helpers/utils';
 import { LocalStorage, SessionStorage } from '@ezzabuzaid/document-storage';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { IRequestOptions } from '@shared/common';
 import { PopupModule } from '@widget/popup';
-import { TimeagoModule } from 'ngx-timeago';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -48,15 +45,8 @@ export const sessionStorageFactory = (injector: Injector) => {
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     CoreModule,
-    TimeagoModule.forRoot(),
     PopupModule,
     StaticPagesModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useClass: LanguageLoader
-      }
-    })
   ],
   providers: [
     {

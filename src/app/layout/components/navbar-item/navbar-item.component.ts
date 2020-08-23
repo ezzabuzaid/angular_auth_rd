@@ -1,5 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, HostBinding, Input, OnDestroy, OnInit, HostListener } from '@angular/core';
+import { Component, HostBinding, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
 import { AppUtils } from '@core/helpers/utils';
 import { NavigationItem } from '@layout/navbar/navigation';
 import { MEDIA_BREAKPOINTS } from '@shared/common';

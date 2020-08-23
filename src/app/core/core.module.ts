@@ -4,15 +4,12 @@ import { NgModule } from '@angular/core';
 import { AsyncDatabase, IndexedDB } from '@ezzabuzaid/document-storage';
 import { RequestOptionsModule } from '@ezzabuzaid/ngx-request-options';
 import { IRequestOptions } from '@shared/common';
-import { CACHE_DATABASE } from './helpers/cache';
 import {
-  CacheInterceptor,
   LoggerInterceptor,
   ProgressInterceptor,
   SetupInterceptor,
   TeardownInterceptor, UniversalInterceptor, UrlInterceptor
 } from './interceptors';
-import { AppUtils } from './helpers/utils';
 
 @NgModule({
   imports: [
@@ -23,23 +20,9 @@ import { AppUtils } from './helpers/utils';
       PROGRESS_BAR: true,
       FORM_PROGRESS_BAR: true,
       FULL_RESPONSE: false,
-      CACHE: {
-        category: 'local_cache',
-        // provider: CACHE_DATABASE,
-        ttl: AppUtils.duration(60)
-      }
     }),
   ],
   providers: [
-    {
-      provide: CACHE_DATABASE,
-      useValue: new AsyncDatabase(new IndexedDB('cache'))
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: CacheInterceptor,
-      multi: true
-    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: SetupInterceptor,

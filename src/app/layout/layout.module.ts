@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { TranslateModule } from '@ngx-translate/core';
 import { MaterialModule } from '@shared/common/material.module';
 import { DirectivesModule } from '@shared/directives';
 import { ProgressBarModule } from '@widget/progress-bar';
@@ -17,7 +16,6 @@ import { LayoutRoutingModule } from './layout-routing.module';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 
-import { ChatModule } from 'app/pages/chat';
 import { GravatarModule } from 'ngx-gravatar';
 
 @NgModule({
@@ -26,11 +24,9 @@ import { GravatarModule } from 'ngx-gravatar';
     LayoutRoutingModule,
     MaterialModule,
     SidebarModule,
-    TranslateModule.forChild(),
     ScrollingModule,
     DirectivesModule,
     GravatarModule,
-    ChatModule,
     ProgressBarModule
   ],
   declarations: [

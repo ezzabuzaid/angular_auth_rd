@@ -2,8 +2,6 @@ import { async, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { CoreModule } from '@core/core.module';
-import { LanguageLoader } from '@core/helpers/language';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
@@ -13,12 +11,7 @@ describe('AppComponent', () => {
         RouterTestingModule,
         ServiceWorkerModule.register('', { enabled: true }),
         CoreModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: LanguageLoader
-          }
-        }),
+
       ],
       declarations: [
         AppComponent

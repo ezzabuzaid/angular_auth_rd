@@ -1,83 +1,132 @@
-# Angular buildozer, A Production-ready Angular boilerplate
+# Authentication/Authorization in Web Application
 
-**Better document will be available soon, with inclusive demonstrations about the folder structure and what you need to kick things off**
- 
+## Prolog
+
+After reading a lot about security, authentication, authorization For restfull Web API, I decided to code what I read so anyone can benefit from and to spread my knowledge.
+
+the code and documentation still under development. 
 
 ## Getting Started
 
 1. Clone the project.
-2. Run `node setup [project-name] [project-title]` .
-3. Remove anything other than `[portal, static]` from `src/app/pages` .
-4. Remove `[services, models]` from `src/app/shared` .
-4. Clear out API/Routing constants.
-5. Free up the assets if needed.
+2. run `npm install`
+3. run `npm run start:ssr` or `npm start`
 
-## Folder Structure
+## What's There
 
-* **Partials**
+1. Login
+2. Refresh Token
+3. Signup
+4. Forget/Reset Password
+5. Two Factor Authentication
+6. Single Sign-On
+7. Session Management
 
-    So you have **Orders** and **Products** pages and there's the component that's shared between them and of course you don't want to duplicate the code here and there, so as the guides tell we should use the same component for both domains, hence, we need to configure it to adapt different places with respect to single responsibility principle and remember the code should be agonistic.
-    for that, you need to use input and output functionality offered by the framework to communicate with the host.
-    now, we know that the component is related to **orders** and we need to use it in other domain, therefore, we need another folder to make things consistent and easy to reach, here where it came the idea of **partial** module/components that can be used across the pages. so the things within the partials are strictly related to a domain and not just reusable component like **MainButton**
+### Rules
 
-* **Widget**
+* Login
+    - Will be using username and password
+    - The response should consist of access_token and refresh_token
+    - access_token claims will be {ITokenClaim}
+    - an email will be sent after each successful login attempt
+    - Each login should have a session
+    - The session is a set of information about the client that used to login with
+    - A user will have only 3 sessions which means in order to log in after that he needs to logout from a device
+    - logout will deactivate the login session, thus the active session number will decrease.
 
-    A Container of reusable widgets that is not directly related to a domain
-    e.g: **stepper** module aka Wizard Form is set of blocks used to navigate in one direction, it's could be part of the requirements but not essentially related to any domain.
-    When you want to make **order-stepper** that related to **Orders** domain you need to move it to  **`Partials`** folder because  it's a critical part of the application
+* Signup
+    - A user will enter at least a username, password, email, mobile.
+    - Account uniqueness should be based on email, username, mobile.
+    - The password should have strict validation rules.
+    - The client should validate each field before calling the server.
+    - an email must be sent after successful creation to verify the email
+    - the email should include a link with token
+    - the token expiry date should be less than 5 min
 
-## What's inside
+* Verification
+    - The user somehow will receive a link with token
+    - the link will request the server to update the email verification status
+    - if the token is well, then the update should be done and redirect to website login page
+    - otherwise, the server must reject the request
 
-* Widgets
+### Explanation
 
-<!-- 1. resizable: An easy way to make any block horizontaly resizable -->
+* **Login**
+1. A user will send his credentials (username and password) to the server
+2. server looks up to the database to check if there's a user with that username
+3. server will reject the request if there's no match
+4. if there's a match, the server will check the equality of the entered password and the password from the database and reject the request if not the same hash
+5. if they're equal then the server will ask the database to get the count of the active sessions for this valid-user
+6. if the active sessions count is more than the maximum then the server will reject the request
+7. if they are below the count, the server creates a session to label the login, send an email confirming the user that a login attempt happened successfully and send back {RefreshToken} DTO
+8. the client will save the token to use in subsequent requests
+9. the client will navigate the user to the Dashboard page
 
-1. sidebar: Customized sidebar with variaty of options inculding horizontal resizing
-2. scroll-detection: Detect that a scroll happen
-3. infinity-scroll: Infinity Scroll module
+``` typescript
+export class RefreshToken {
+    public token: string;
+    public refreshToken: string;
+}
+```
 
-## Deprecation
+* **Create Account**
 
-* Widget/gmap, is no longer maintained, I'll keep it as reference
-* Widget/dialog, is no longer maintained, you can use it to create dialog
+1. user fill up his information which mainly is {CreateUserDto} that will adhere to the following rules
+    - username, email, mobile must be unique otherwise the server will reject the request
+    - password should be between 8 and 16 characters and have at least
+        * one uppercase character
+        * one lowercase character
+        * one special character
+        * one number
+    - the role should be one of the specified Roles attributes
+2. after passing the above criteria, the server will send the user verification email contains a link that includes the token as query and will return verification message to the client to show it up
+3. the user will click on that link to verify his identity, the server will decode the token and check that is valid and not expired
+4. if the token is well, then the `emailVerified` attribute will be updated and the user will be redirected to the website
 
-## Contributing
+``` typescript
+class CreateUserDto {
+    @IsString()
+    public username: string = null;
 
-Don’t hesitate to open issues and make a pull request to help improve code
+    @IsString()
+    public password: string = null;
 
-1.  Fork it!
-2.  Create your feature branch: `git checkout -b my-new-feature`
-3.  Commit your changes: `git commit -m 'Add some feature'`
-4.  Push to the branch: `git push origin my-new-feature`
-5.  Submit a pull request :D
+    @IsEmail()
+    public email: string = null;
 
-## Versioning
+    @IsString()
+    public mobile: string = null;
 
-The project will be maintained under the semantic versioning guidelines.  
-Releases will be numbered with the following format:  
- `<major>.<minor>.<patch>`
-For more information on SemVer, please visit [http://semver.org](http://semver.org).
+    @IsString()
+    public fullName: string = null;
 
-## Developer
+    @IsIn(Object.values(Roles))
+    public role: Roles = null;
+}
 
-##### [Ezzabuzaid](mailto:ezzabuzaid@hotmail.com)
+export class Roles {
+    static SUPERADMIN = 'SUPERADMIN';
+    static ADMIN = 'ADMIN';
+    static CLIENT = 'CLIENT';
+    static CUSTOMER = 'CUSTOMER';
+}
 
-*   [Dev.to](https://dev.to/ezzabuzaid)
-*   [GitHub](https://github.com/ezzabuzaid)
-*   [Linkedin](https://www.linkedin.com/in/ezzabuzaid)
+```
 
-## Maintainers
+please note that the verification step is not required to log in and it's possible to make it, but as for the implementation it's not and the user can verify after then.
+you can also limit the features for unverified users
 
-[**ezzabuzaid**](https://github.com/ezzabuzaid) - (author) - [ezzabuzaid@hotmail.com](mailto:ezzabuzaid@hotmail.com)
+the frontend will also perform each verification step stated above and will show message corresponds to each rule on an error and will navigate to the login page after creating the account
 
-## License
+the token claims will be as following, the verified attribute will only be true after the user verify his email and mobile
 
-##### The MIT License (MIT)
+``` typescript
+export interface IClaim {
 
-## help is welcomed
+    id: PrimaryKey;
+    readonly iat?: number;
+    readonly exp?: number;
 
-### Don’t heistate to try it
+}
 
-After cloning the project run `npm install && ng serve -o`
-
-##### Built with love <3
+export interface I

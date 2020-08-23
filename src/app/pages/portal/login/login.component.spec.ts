@@ -5,11 +5,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ApplicationUser } from '@core/application-user';
 import { Constants } from '@core/constants';
 import { TokenHelper } from '@core/helpers/token';
-import { FormModule } from '@partials/form';
+import { FormFactoryModule } from '@ezzabuzaid/ngx-form-factory';
 import { MaterialModule } from '@shared/common';
 import { PortalModel } from '@shared/models';
 import { asyncData, TestUtility } from 'test/fixture';
-import { TranslateTestingModule } from 'test/mocks';
 import { RegisterComponent } from '../register/register.component';
 import { LoginComponent } from './login.component';
 
@@ -28,11 +27,10 @@ fdescribe('LoginComponent', () => {
                 BrowserAnimationsModule,
                 MaterialModule,
                 RouterTestingModule.withRoutes([]),
-                FormModule,
-                TranslateTestingModule
+                FormFactoryModule,
             ]
         }).compileComponents();
-        testUtility = new TestUtility(LoginComponent);
+        testUtility = new TestUtility(TestBed.createComponent(LoginComponent));
         component = testUtility.fixture.componentInstance;
     }));
 

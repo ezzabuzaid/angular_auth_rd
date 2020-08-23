@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
 import { MaterialModule } from '@shared/common';
 import { AlertComponent } from './alert/alert.component';
 import { ConfirmComponent } from './confirm/confirm.component';
@@ -18,7 +17,6 @@ import { PromptComponent } from './prompt/prompt.component';
     CommonModule,
     MaterialModule,
     FormsModule,
-    TranslateModule.forChild()
   ],
   providers: [
     PopupManager
