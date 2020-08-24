@@ -2,7 +2,7 @@
 
 ## Prolog
 
-After reading a lot about security, authentication, authorization For restfull Web API, I decided to code what I read so anyone can benefit from and to spread my knowledge.
+Simple implementation of restful authentication/authorization using Json Web Token.
 
 the code and documentation still under development. 
 
